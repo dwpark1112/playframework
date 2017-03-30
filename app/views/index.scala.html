@@ -1,7 +1,11 @@
+@*매개변수 선언부*@
 @(message: String)
 
-@main("Welcome to Play") {
+@*다른 뷰 템플릿 호출, 이 경우 main *@
+@*String 매개변수 *@
+@main("This is Play & Scala world!") {
 
+    @*html 매개변수*@
     @play20.welcome(message)
 
 }

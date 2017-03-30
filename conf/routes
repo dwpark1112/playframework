@@ -3,6 +3,7 @@
 # ~~~~
 
 # Home page
+# URL을 controllers의 Application - index에 매핑
 GET     /                           controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path

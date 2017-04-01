@@ -35,10 +35,9 @@
                 // colors
                 var colorRed = "#dd2026";
                 var colorBlue = "#509cdd";
-                var colorGreen = "#ddb923";
 
                 var ballRadius = 10;
-                var ballColors = colorRed;
+                var ballColors = colorBlue;
 
                 // paddle
                 var paddleHeight = 10;
@@ -96,9 +95,20 @@
                         dx = -dx;
                         ballColors = colorBlue;
                     }
-                    if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
+
+                    // implements 'game over condition'
+                    if(y + dy < ballRadius) {
                         dy = -dy;
-                        ballColors = colorGreen;
+                    }
+                    else if(y + dy > canvas.height-ballRadius) {
+                        if(x > paddleX && x < paddleX + paddleWidth) {
+                            dy = -dy;
+                        }
+                        else {
+                            ballColors = colorRed;
+                            alert("GAME OVER");
+                            document.location.reload();
+                        }
                     }
 
                     // for paddle position

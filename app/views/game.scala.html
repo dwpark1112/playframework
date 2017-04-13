@@ -55,6 +55,10 @@
                 var brickOffsetTop = 30;
                 var brickOffsetLeft = 30;
 
+                // score and lives
+                var score = 0;
+                var lives = 3;
+
                 var bricks = [];
                 for(c=0; c<brickColumnCount; c++) {
                     bricks[c] = [];
@@ -118,6 +122,20 @@
                     ctx.closePath();
                 }
 
+                // draw score
+                function drawScore() {
+                    ctx.font = "16px Arial";
+                    ctx.fillStyle = "#0095DD";
+                    ctx.fillText("Score: "+score, 8, 20);
+                }
+
+                // draw lives
+                function drawLives() {
+                    ctx.font = "16px Arial";
+                    ctx.fillStyle = "#0095DD";
+                    ctx.fillText("Lives: "+lives, canvas.width-65, 20);
+                }
+
                 // draw
                 function draw() {
                     // Clearing the canvas before each frame
@@ -127,11 +145,12 @@
                     drawBall();
                     drawPaddle();
                     collisionDetection();
+                    drawScore();
+                    drawLives();
 
                     // for bound off the walls
                     if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
                         dx = -dx;
-                        ballColors = colorBlue;
                     }
 
                     // implements 'game over condition'
@@ -139,17 +158,26 @@
                         dy = -dy;
                     }
                     else if(y + dy > canvas.height-ballRadius) {
-                        if(x > paddleX && x < paddleX + paddleWidth) {
+                        if (x > paddleX && x < paddleX + paddleWidth) {
                             dy = -dy;
-                        }
-                        else {
-                            ballColors = colorRed;
-                            alert("GAME OVER");
-                            document.location.reload();
+                        } else {
+                            lives--;
+                            if (!lives) {
+                                alert("GAME OVER");
+                                document.location.reload();
+                            }
+                            else {
+                                if (lives == 1) {
+                                    ballColors = colorRed;
+                                }
+                                x = canvas.width / 2;
+                                y = canvas.height - 30;
+                                dx = 2;
+                                dy = -2;
+                                paddleX = (canvas.width - paddleWidth) / 2;
+                            }
                         }
                     }
-
-
 
                     // for paddle position
                     if(rightPressed && paddleX < canvas.width-paddleWidth) {
@@ -161,7 +189,10 @@
 
                     x += dx;
                     y += dy;
+                    requestAnimationFrame(draw);
                 }
+
+                draw();
 
                 // detect collision
                 function collisionDetection() {
@@ -172,6 +203,13 @@
                                 if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
                                     dy = -dy;
                                     b.status = 0;
+                                    score++;
+
+                                    // check winning
+                                    if(score == brickRowCount*brickColumnCount) {
+                                        alert("YOU WIN, CONGRATULATIONS!");
+                                        document.location.reload();
+                                    }
                                 }
                             }
                         }
@@ -182,7 +220,7 @@
                 document.addEventListener("keydown", keyDownHandler, false);
                 document.addEventListener("keyup", keyUpHandler, false);
 
-                setInterval(draw, 15);
+//                setInterval(draw, 15);
         </script>
 
     </body>
